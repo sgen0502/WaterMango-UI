@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, TableHead, TableRow, TableCell, TableBody, Button, Table } from '@material-ui/core';
+import { Typography, TableHead, TableRow, TableCell, TableBody, Table } from '@material-ui/core';
 import { PlantModel } from '../../../Model/Models';
 import PlantRow from './PlantRow';
 import PlantContainer from '../../../Container/PlantContainer';

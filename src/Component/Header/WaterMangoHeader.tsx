@@ -1,6 +1,5 @@
 import React from 'react';
-import { AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
-import { defaultCipherList } from 'constants';
+import { AppBar, Toolbar, Typography } from '@material-ui/core';
 
 type HeaderProps = {
     title: String
