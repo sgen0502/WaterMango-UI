@@ -37,7 +37,7 @@ class JsonRestClient{
 
     async put(path: string, body?: any){
         if(this.request)
-            return await this.request.post(path, body);
+            return await this.request.put(path, body);
     }
 }
 

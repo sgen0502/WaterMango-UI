@@ -18,8 +18,6 @@ type AppState = {
 const Headers: string[] = ["Name", "When did water?", "x", "y", "z"]
 
 class App extends Component<{}, AppState>{
-
-    request = new JsonRestClient(AppConfig.uris.base);
     container: PlantContainer = new PlantContainer();
 
     constructor(props: any) {
@@ -28,13 +26,7 @@ class App extends Component<{}, AppState>{
     }
 
     async componentWillMount() {
-        await this.fetchPlants();
-        //this.setState({ loading: false });
-    }
-
-    async fetchPlants(){
-        let response = await this.request.getTyped<PlantModel[]>(AppConfig.uris.getAll);
-        if(response) this.container.setRows(response.data);
+        await this.container.loadRows();
     }
 
     render() {
@@ -48,10 +40,9 @@ class App extends Component<{}, AppState>{
                             <Grid container spacing={3}>
                                 <Grid item xs={12}>
                                 <Subscribe to={[this.container]}> 
-                                    { (contaianer: PlantContainer) =>(
-                                            <PlantTable title="Plants Status" headers={Headers} rows={contaianer.getRows()}/>
-                                        )
-                                    }
+                                    { (container: PlantContainer) => (
+                                        <PlantTable title="Plants Status" headers={Headers} container={container}/>
+                                    )}
                                 </Subscribe>
                                 </Grid>
                             </Grid>

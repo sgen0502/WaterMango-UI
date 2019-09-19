@@ -5,7 +5,7 @@ export const AppConfig = {
         base: "https://localhost:5001/",
         getAll: "api/plants",
         get: "api/plants/",
-        update: "api/plants"
+        update: "api/plants/"
     },
     
 }
