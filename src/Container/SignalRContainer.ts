@@ -1,44 +1,26 @@
 import { Container } from 'unstated'
 import { PlantModel } from '../Model/Models';
-import JsonRestClient from '../Utils/JsonRestClient';
-import { AppConfig } from '../Utils/Config';
-import { NormalizePlantModelArray } from '../Utils/ArrayHelper';
+import PlantStatusSignalRChannel from '../Service/SignalR/PlantStatusSignalRChannel';
 
-type SignalRContainerState ={
-    rows: PlantModel[]
-}
-
-class SignalRContainer extends Container<SignalRContainerState> {
-    request = new JsonRestClient(AppConfig.uris.base);
-    plants: PlantModel[] = [];
-    state = {
-        rows: []
-    }
+class SignalRContainer extends Container<{}> {
+    signalHub: PlantStatusSignalRChannel = new PlantStatusSignalRChannel();
 
     constructor() {
         super();
-        this.loadRows = this.loadRows.bind(this);    
-    }
-    
-
-    async loadRows(){
-        let response = await this.request.getTyped<PlantModel[]>(AppConfig.uris.getAll);
-        if(response) this.setRows(response.data);
+        this.sendStatusUpdate = this.sendStatusUpdate.bind(this);    
+        this.assign = this.assign.bind(this); 
     }
 
-    setRows(inputRows: PlantModel[]){
-        this.plants = inputRows;
-        this.setState({rows: inputRows});
+    assign(topic: string, action: () => any){
+        this.signalHub.assign(topic, action);
     }
 
-    getRows(){
-        return this.state.rows;
+    assignWithArgs(topic: string, action: (id: number, status: number, date: Date) => any){
+        this.signalHub.assignWithArgs(topic, action);
     }
 
-    updateRow(id: number, input: PlantModel){
-        const index = this.plants.findIndex(p => p.id === id);
-        this.plants[index] = input;
-        this.setState({rows: this.plants});
+    sendStatusUpdate(plant: PlantModel){
+        this.signalHub.invoke(plant.id, plant.status, plant.lastUpdate);
     }
 }
 

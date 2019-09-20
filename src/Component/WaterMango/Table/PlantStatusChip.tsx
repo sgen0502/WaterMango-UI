@@ -1,20 +1,21 @@
 import React from 'react';
 import { Chip } from '@material-ui/core';
+import { PlantStatus } from '../../../Model/Models';
 
 
 type PlantStatusProps = {
     status: number
 }
 
-export const PlantStatusChip = (props: PlantStatusProps) => {
+const PlantStatusChip = (props: PlantStatusProps) => {
 
     const getColor = () => {
         switch(props.status){
-            case 1:
+            case PlantStatus.WATERING:
                 return "primary";
-            case 2:
+            case PlantStatus.WAITING:
                 return "secondary";
-            case 3:
+            case PlantStatus.ALERT:
                 return "secondary";
             default:
                 return "default";
@@ -30,9 +31,24 @@ export const PlantStatusChip = (props: PlantStatusProps) => {
         }
     }
 
+    const getLabel = () => {
+        switch(props.status){
+            case PlantStatus.WATERING:
+                return "Feeding water";
+            case PlantStatus.WAITING:
+                return "This plant needs to rest.";
+            case PlantStatus.ALERT:
+                return "Was not feed for 6 hours!";
+            default:
+                return "Give water!";
+        }
+    }
+
     return(
         <React.Fragment>
-            <Chip variant={getOutlined()} color={getColor()} label={props.status} />
+            <Chip variant={getOutlined()} color={getColor()} label={getLabel()} />
         </React.Fragment>
     )
 }
+
+export default  PlantStatusChip;

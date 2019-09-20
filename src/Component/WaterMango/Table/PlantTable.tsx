@@ -14,7 +14,7 @@ const PlantTable = (props: TableProps) => {
     
     React.useEffect(() => {
         props.container.loadRows();
-    }, [])
+    }, [props.container])
 
     return (
         <React.Fragment>

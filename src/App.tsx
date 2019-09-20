@@ -1,23 +1,19 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Button, Container, Grid} from '@material-ui/core';
-// import classes from '*.module.css';
+import { Container, Grid} from '@material-ui/core';
 import WaterMangoHeader from './Component/Header/WaterMangoHeader';
 import PlantTable from './Component/WaterMango/Table/PlantTable';
-// import JsonRestClient from './Utils/JsonRestClient';
-// import { AppConfig } from './Utils/Config';
-// import { PlantModel } from './Model/Models';
 import { Provider, Subscribe } from 'unstated'
 import PlantContainer from './Container/PlantContainer';
-import PlantStatusSignalRChannel from './Service/SignalR/PlantStatusSignalRChannel';
 import { SignalRToContainerComponent } from './Component/WaterMango/SignalRToContainerComponent';
 import { SnackbarProvider } from 'notistack';
+import SignalRContainer from './Container/SignalRContainer';
 
 type AppState = {
     loading: boolean
 }
 
-const Headers: string[] = ["Name", "When did water?", "Status", " ", "Give Water!"]
+const Headers: string[] = ["Name", "When did water?", "Status", "Give Water!"]
 
 class App extends Component<{}, AppState>{
     constructor(props: any) {
@@ -41,9 +37,9 @@ class App extends Component<{}, AppState>{
                                         <PlantTable title="Plants Status" headers={Headers} container={container}/>
                                     )}
                                 </Subscribe>
-                                <Subscribe to={[PlantContainer]}> 
-                                    { (container: PlantContainer) => (
-                                        <SignalRToContainerComponent container={container}/>
+                                <Subscribe to={[PlantContainer, SignalRContainer]}> 
+                                    { (container: PlantContainer, signalRContainer: SignalRContainer) => (
+                                        <SignalRToContainerComponent container={container} signalrContainer={signalRContainer}/>
                                     )}
                                 </Subscribe>
                                 </Grid>
