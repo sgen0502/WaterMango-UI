@@ -15,7 +15,7 @@ export const SignalRToContainerComponent = (props: SignalRToContainerProps) => {
     React.useEffect(() =>{
         props.signalrContainer.assign("StatusUpdate", props.container.loadRows);
         props.signalrContainer.assignWithArgs("StatusUpdate", (id: number, status: number, date: Date) => {
-            if(status === PlantStatus.ALERT) enqueueSnackbar(`Alert! Plant ID = ${id} was not feed for 6 hours.`, { variant: "error"})
+            if(status === PlantStatus.ALERT) enqueueSnackbar(`Alert! Plant ID = ${id} is not watered for 6 hours.`, { variant: "error"})
         });
     }, [enqueueSnackbar, props.container.loadRows, props.signalrContainer])
     

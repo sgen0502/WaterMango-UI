@@ -34,11 +34,11 @@ const PlantStatusChip = (props: PlantStatusProps) => {
     const getLabel = () => {
         switch(props.status){
             case PlantStatus.WATERING:
-                return "Feeding water";
+                return "Giving water";
             case PlantStatus.WAITING:
-                return "This plant needs to rest.";
+                return "Needs to rest.";
             case PlantStatus.ALERT:
-                return "Was not feed for 6 hours!";
+                return "Has not been watered for 6 hours!";
             default:
                 return "Give water!";
         }
