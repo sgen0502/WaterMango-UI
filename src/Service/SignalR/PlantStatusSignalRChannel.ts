@@ -8,22 +8,35 @@ export default class PlantStatusSignalRChannel{
         this.connectionSettings();
     }
 
-    private connectionSettings() {
-        // 通知を受け取る SampleHubのSendAsyncに指定したターゲットに第一引数を合わせる
+    private async connectionSettings() {
+        // For testing SignalR
         this.connection.on('ReceiveMessage', (u: string, m: string) => {
           console.log(`${u} ${m}`)
         });
+
+        this.connection.on('StatusUpdate', (u: number, m: string, d: Date) => {
+            console.log(`${u} ${m} ${d}`)
+          });
+
         // コネクション開始
-        this.connection.start()
-          .then(() => console.log('接続成功'))
-          .catch(() => console.log('接続失敗'));
+        await this.connection.start()
+          .then(() => console.log('Connected'))
+          .catch(() => console.log('Failed to Connect'));
+
+        this.connection.invoke('ConnectStateManager')
+          .then(() => console.log('Successfully sent a message'))
+          .catch(() => console.log('Failed to send a message'));
     } 
 
-    invoke(user: string, message: string) {
-    // サーバーにメッセージを送信する
-    // invokeメソッドの第一引数にはHubクラスに定義したメソッド名を指定する
-    this.connection.invoke('SendMessage', user, message)
-        .then(() => console.log('送信成功'))
-        .catch(() => console.log('送信失敗'));
+    assign(topic: string, action: () => any){
+        this.connection.on(topic, (id: number, date: Date, status: number) => {
+            action();
+        });
+    }
+
+    invoke(id: number, date: Date, status: number) {
+        this.connection.invoke('SendStatusUpdate')
+        .then(() => console.log('Successfully sent a message'))
+        .catch(() => console.log('Failed to send a message'));
     }
 }

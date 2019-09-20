@@ -10,34 +10,25 @@ import PlantTable from './Component/WaterMango/Table/PlantTable';
 import { Provider, Subscribe } from 'unstated'
 import PlantContainer from './Container/PlantContainer';
 import PlantStatusSignalRChannel from './Service/SignalR/PlantStatusSignalRChannel';
+import { SignalRToContainerComponent } from './Component/WaterMango/SignalRToContainerComponent';
+import { SnackbarProvider } from 'notistack';
+
 type AppState = {
     loading: boolean
 }
 
-const Headers: string[] = ["Name", "When did water?", "x", "y", "z"]
+const Headers: string[] = ["Name", "When did water?", "Status", " ", "Give Water!"]
 
 class App extends Component<{}, AppState>{
-    container: PlantContainer = new PlantContainer();
-    signalHub: PlantStatusSignalRChannel;
-
     constructor(props: any) {
         super(props);
-        this.signalHub = new PlantStatusSignalRChannel();
         this.state = { loading: true };
-        this.sendMessage = this.sendMessage.bind(this);
-    }
-
-    async componentWillMount() {
-        await this.container.loadRows();
-    }
-
-    sendMessage(){
-        if(this.signalHub) this.signalHub.invoke("A", "B");
     }
 
     render() {
         return (
             <Provider>
+            <SnackbarProvider maxSnack={3}>
             <div>
                 <WaterMangoHeader title="Water Mango"/>
                 <main>
@@ -45,18 +36,23 @@ class App extends Component<{}, AppState>{
                         <Container maxWidth="lg">
                             <Grid container spacing={3}>
                                 <Grid item xs={12}>
-                                <Subscribe to={[this.container]}> 
+                                <Subscribe to={[PlantContainer]}> 
                                     { (container: PlantContainer) => (
                                         <PlantTable title="Plants Status" headers={Headers} container={container}/>
                                     )}
                                 </Subscribe>
+                                <Subscribe to={[PlantContainer]}> 
+                                    { (container: PlantContainer) => (
+                                        <SignalRToContainerComponent container={container}/>
+                                    )}
+                                </Subscribe>
                                 </Grid>
-                                <Button variant="contained" color="primary" onClick={this.sendMessage}>Click Me</Button>
                             </Grid>
                         </Container>
                     </div>
                 </main>
             </div>
+            </SnackbarProvider>
             </Provider>
         );
     }

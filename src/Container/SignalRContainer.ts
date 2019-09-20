@@ -2,12 +2,13 @@ import { Container } from 'unstated'
 import { PlantModel } from '../Model/Models';
 import JsonRestClient from '../Utils/JsonRestClient';
 import { AppConfig } from '../Utils/Config';
+import { NormalizePlantModelArray } from '../Utils/ArrayHelper';
 
-type PlantContainerState ={
+type SignalRContainerState ={
     rows: PlantModel[]
 }
 
-class PlantContainer extends Container<PlantContainerState> {
+class SignalRContainer extends Container<SignalRContainerState> {
     request = new JsonRestClient(AppConfig.uris.base);
     plants: PlantModel[] = [];
     state = {
@@ -41,4 +42,4 @@ class PlantContainer extends Container<PlantContainerState> {
     }
 }
 
-export default PlantContainer;
+export default SignalRContainer;
