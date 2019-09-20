@@ -6,9 +6,7 @@ class JsonRestClient{
         'X-Requested-With': 'XMLHttpRequest'
     }
     request: AxiosInstance | undefined;
-    /**
-     *
-     */
+
     constructor(uri: string) {
         this.request = axios.create({
             baseURL: uri,
